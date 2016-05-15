@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MongoDB/Mongoose Demo</title>
+    <script type="text/javascript" src="./node_modules/zingchart/client/zingchart.min.js"></script>
+    
+    <!--
+    <script>
+    zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
+    </script> 
+    -->
+
+  </head>
+  <body>
+  <h1>MCandlestick Chart</h1>
+    <div id="myChart"></div>
+    <script>
+   
+    // Generates GET requests to a URL.
+    function httpGet(Url){
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open("GET", Url, false);
+      xmlHttp.send(null);
+      return xmlHttp.responseText;
+    }
+
+    window.onload=function(){
+      // GET request to localhost:3000/test, which has been configured to send back our db data
+      var aData = JSON.parse(httpGet('http://localhost:7070/BANCAS'));
+     
+      var seriesFecha = [];
+      //var seriesData = [];
+      var seriesOpen = [];
+      var seriesHigh = [];
+      var seriesLow = [];
+      var seriesClose = [];
+      var seriesVolumen = [];
+      
+      // Push the data into the seriesData object's arrays.
+     /* for(var j=0 ; j < aData.lenght; j++){
+        seriesFecha.push([
+          aData[j]['fecha']
+          ]);
+        console.log(aData[j])
+      }*/
+
+      for(var n=0 ; n < aData.length; n++){
+        seriesFecha.push([aData[n]['fecha']])
+        seriesOpen.push([aData[n]['abierto']]);
+        seriesHigh.push([aData[n]['alto']]);
+        seriesLow.push([aData[n]['bajo']]);
+        seriesClose.push([aData[n]['cierre']]);
+        //riesVolumen.push([aData[n]['volumen']]);
+
+        console.log(aData[n])
+        
+      }
+
+   /*   for(var c=0 ; c < aData.lenght; c++){
+        seriesHigh.push([
+          aData[c]['alto']
+          ]);
+      }
+      for(var d=0 ; d < aData.lenght; d++){
+        seriesLow.push([
+          aData[d]['bajo']
+          ]);
+      }
+      for(var f=0 ; f < aData.lenght; f++){
+        seriesClose.push([
+          aData[f]['cierre']
+          ]);
+      }*/
+     /* for(var n=0 ; n < aData.length; n++){
+        seriesData.push([
+        //aData[n]['fecha'],
+        aData[n]['abierto'],
+        aData[n]['alto'],
+        aData[n]['bajo'],
+        aData[n]['cierre']
+        ]);
+        console.log(aData[n])
+       }*/
+       for (var m= 0; m < aData.length; m++){
+        seriesVolumen.push([
+          aData[m]['volumen']
+          ]);
+       }
+
+      zingchart.THEME = "classic";
+
+      var myConfig = {
+        "show-progress": false,
+        "background-color": "red",
+        "graphset": [{
+        "type": "area",
+        "background-color": "#fff",
+        "x": 0,
+        "y": 0,
+        "height": "82%",
+        "width": "100%",
+        "tooltip": {
+          "visible": false
+        },
+        "crosshair-x": {
+          "shared": "true",
+          "line-width": "2px",
+          "line-color": "rgb(86,110,147)",
+          "alpha": "0.3",
+          "value-label": {
+            "text": "Open : %data-ouv EUR<br />High : %data-haut EUR<br />Low : %data-bas EUR<br />Close : %v EUR<br  ",
+            "text-align": "left"
+          },
+          "scale-label": {
+            "background-color": "rgb(86,110,147)"
+          }
+
+        },
+        "plotarea": {
+          "margin-top": "5%",
+          "margin-bottom": "15%",
+          "margin-left": "11%"
+        },
+        "plot": {
+          "preview": "false"
+        },
+        "preview": {
+          "shared": "true",
+          "height": "26%",
+          "y": "94%",
+          "width": "100%",
+          "background-color": "none",
+          "border-width": 0,
+          "alpha": 0.0,
+          "margin": "0 6.5% 6% 11%",
+          "handle": {
+          "height": "15px",
+          "width": "15px",
+          "background-color": "rgb(86,110,147)",
+          "margin-top": 0
+          }
+        },
+        "scale-x":{
+          "values":[/*[seriesFecha[n=30],seriesFecha[n=29],seriesFecha[n=28],seriesFecha[n=27],seriesFecha[n=26],seriesFecha[n=25],
+                    seriesFecha[n=24],seriesFecha[n=23],seriesFecha[n=22],seriesFecha[n=21],seriesFecha[n=20],seriesFecha[n=19],
+                    seriesFecha[n=18],seriesFecha[n=17],seriesFecha[n=16],seriesFecha[n=15],seriesFecha[n=14],seriesFecha[n=13],
+                    seriesFecha[n=12],seriesFecha[n=11],seriesFecha[n=10],seriesFecha[n=9],seriesFecha[n=8],seriesFecha[n=7],
+                    seriesFecha[n=6],seriesFecha[n=5],seriesFecha[n=4],seriesFecha[n=3],seriesFecha[n=2],seriesFecha[n=1],seriesFecha[n=0]
+
+          /*"29/05/00", "30/05/00", "31/05/00", "01/06/00", "02/06/00", "05/06/00", "06/06/00", "07/06/00", "08/06/00", "09/06/00", "12/06/00", "13/06/00", "14/06/00", "15/06/00", "16/06/00", "19/06/00", "20/06/00", "21/06/00", "22/06/00", "23/06/00", "26/06/00", "27/06/00", "28/06/00", "29/06/00", "30/06/00", "03/07/00", "04/07/00", "05/07/00", "06/07/00", "07/07/00"
+          fechas*/
+                    
+          ],
+          "line-width": 1,
+          "tick": {
+            "line-width": "1px"
+          },
+          "zooming": "true"
+        },
+        "scale-y":{
+          "values": "0:80:10",
+          "line-width": 1,
+          "tick": {
+            "line-width": 1
+          },
+          "item": {
+            "padding": "5px"
+          },
+          "decimals": 2,
+          "format": "€%v",
+          "guide": {
+            "line-style": "solid",
+            "line-color": "#777",
+            "items": [{
+              "background-color": "#fff"
+            }, {
+              "background-color": "#eee"
+            }]
+          }
+        },
+        "zoom": {
+          "shared": "true"
+        },
+        "series":[{
+            "data-ouv": [/*"abierto"*/
+                    seriesOpen[n=30],seriesOpen[n=29],seriesOpen[n=28],seriesOpen[n=27],seriesOpen[n=26],seriesOpen[n=25],
+                    seriesOpen[n=24],seriesOpen[n=23],seriesOpen[n=22],seriesOpen[n=21],seriesOpen[n=20],seriesOpen[n=19],
+                    seriesOpen[n=18],seriesOpen[n=17],seriesOpen[n=16],seriesOpen[n=15],seriesOpen[n=14],seriesOpen[n=13],
+                    seriesOpen[n=12],seriesOpen[n=11],seriesOpen[n=10],seriesOpen[n=9],seriesOpen[n=8],seriesOpen[n=7],
+                    seriesOpen[n=6],seriesOpen[n=5],seriesOpen[n=4],seriesOpen[n=3],seriesOpen[n=2],seriesOpen[n=1],seriesOpen[n=0]
+            ],
+            "data-haut": [/*"alto"*/
+                    seriesHigh[n=30],seriesHigh[n=29],seriesHigh[n=28],seriesHigh[n=27],seriesHigh[n=26],seriesHigh[n=25],
+                    seriesHigh[n=24],seriesHigh[n=23],seriesHigh[n=22],seriesHigh[n=21],seriesHigh[n=20],seriesHigh[n=19],
+                    seriesHigh[n=18],seriesHigh[n=17],seriesHigh[n=16],seriesHigh[n=15],seriesHigh[n=14],seriesHigh[n=13],
+                    seriesHigh[n=12],seriesHigh[n=11],seriesHigh[n=10],seriesHigh[n=9],seriesHigh[n=8],seriesHigh[n=7],
+                    seriesHigh[n=6],seriesHigh[n=5],seriesHigh[n=4],seriesHigh[n=3],seriesHigh[n=2],seriesHigh[n=1],seriesHigh[n=0]
+            ],
+            "data-bas": [/*"bajo"*/
+                    seriesLow[n=30],seriesLow[n=29],seriesLow[n=28],seriesLow[n=27],seriesLow[n=26],seriesLow[n=25],
+                    seriesLow[n=24],seriesLow[n=23],seriesLow[n=22],seriesLow[n=21],seriesLow[n=20],seriesLow[n=19],
+                    seriesLow[n=18],seriesLow[n=17],seriesLow[n=16],seriesLow[n=15],seriesLow[n=14],seriesLow[n=13],
+                    seriesLow[n=12],seriesLow[n=11],seriesLow[n=10],seriesLow[n=9],seriesLow[n=8],seriesLow[n=7],
+                    seriesLow[n=6],seriesLow[n=5],seriesLow[n=4],seriesLow[n=3],seriesLow[n=2],seriesLow[n=1],seriesLow[n=0]
+            ],
+            //"data-var": [/*"variacion"*/],
+            "values": [/*"cierre"*/
+                    seriesClose[n=30],seriesClose[n=29],seriesClose[n=28],seriesClose[n=27],seriesClose[n=26],seriesClose[n=25],
+                    seriesClose[n=24],seriesClose[n=23],seriesClose[n=22],seriesClose[n=21],seriesClose[n=20],seriesClose[n=19],
+                    seriesClose[n=18],seriesClose[n=17],seriesClose[n=16],seriesClose[n=15],seriesClose[n=14],seriesClose[n=13],
+                    seriesClose[n=12],seriesClose[n=11],seriesClose[n=10],seriesClose[n=9],seriesClose[n=8],seriesClose[n=7],
+                    seriesClose[n=6],seriesClose[n=5],seriesClose[n=4],seriesClose[n=3],seriesClose[n=2],seriesClose[n=1],seriesClose[n=0]
+            ],
+
+        "line-color": "rgb(86,110,147)",
+          "line-width": "2px",
+          "background-color": "rgb(86,110,147)",
+          "alpha-area": 0.4,
+          "marker": {
+            "visible": false
+          }   
+          }]
+      }, {
+        "type": "bar",
+        "alpha": 1,
+        "background-color": "#fff",
+        "tooltip": {
+          "visible": false
+        },
+        "crosshair-x": {
+          "shared": "true",
+          "line-width": "2px",
+          "line-color": "rgb(86,110,147)",
+          "alpha": "0.3",
+          "scale-label": {
+            "visible": "false"
+          }
+        },
+        "height": "23%",
+        "y": "77%",
+        "x": 0,
+        "width": "100%",
+        "plotarea": {
+          "background-color": "#fff",
+          "margin-top": "2%",
+          "margin-bottom": "14%",
+          "margin-left": "11%"
+        },
+        "scale-x": {
+          "values": [/*"29/05/00", "30/05/00", "31/05/00", "01/06/00", "02/06/00", "05/06/00", "06/06/00", "07/06/00", "08/06/00", "09/06/00", "12/06/00", "13/06/00", "14/06/00", "15/06/00", "16/06/00", "19/06/00", "20/06/00", "21/06/00", "22/06/00", "23/06/00", "26/06/00", "27/06/00", "28/06/00", "29/06/00", "30/06/00", "03/07/00", "04/07/00", "05/07/00", "06/07/00", "07/07/00"
+          /*fecha*/
+                    
+          ],
+        "line-width": 1,
+          "tick": {
+            "visible": "false"
+          },
+          "guide": {
+            "visible": false
+          },
+          "zooming": "true",
+          "item": {
+            "visible": false
+          }
+        },
+        "scale-y": {
+          "min-value": 0,
+          "max-value": 100000000,
+          "step": 25,
+          "line-width": 1,
+          "tick": {
+            "line-width": "1px"
+          },
+          "item": {
+            "padding": "5px"
+          },
+          "guide": {
+            "line-style": "solid",
+            "items": [{
+              "background-color": "#fff"
+            }, {
+              "background-color": "#eee"
+            }]
+          },
+          "decimals": 2
+        },
+        "zoom": {
+          "shared": "true"
+        },
+        "series": [{
+          "values":[/*"volumen"*/
+                    seriesVolumen[m=30],seriesVolumen[m=29],seriesVolumen[m=28],seriesVolumen[m=27],seriesVolumen[m=26],seriesVolumen[m=25],
+                    seriesVolumen[m=24],seriesVolumen[m=23],seriesVolumen[m=22],seriesVolumen[m=21],seriesVolumen[m=20],seriesVolumen[m=19],
+                    seriesVolumen[m=18],seriesVolumen[m=17],seriesVolumen[m=16],seriesVolumen[m=15],seriesVolumen[m=14],seriesVolumen[m=13],
+                    seriesVolumen[m=12],seriesVolumen[m=11],seriesVolumen[m=10],seriesVolumen[m=9],seriesVolumen[m=8],seriesVolumen[m=7],
+                    seriesVolumen[m=6],seriesVolumen[m=5],seriesVolumen[m=4],seriesVolumen[m=3],seriesVolumen[m=2],seriesVolumen[m=1],seriesVolumen[m=0]
+          ],
+        "bar-width": "50%",
+        "background-color": "rgb(86,110,147)",
+        "text": "Volume",
+        "marker": {
+        "visible": false
+          }
+          }]
+        }]
+      };
+      zingchart.render({
+        id:"myChart",
+        data: myConfig,
+        height:500,
+        width: 725 
+      });
+      
+    };
+    </script>
+    
+  </body>
+</html>
